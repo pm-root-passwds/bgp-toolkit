@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import os
 import json
+import xmltodict
 import requests
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import templates
@@ -31,6 +32,9 @@ def test(as_set):
 
     print(get)
 
+    print(get.text)
+    doc = xmltodict.parse(get.text)
+    print(doc)
     return get.status_code
     # return get.status_code, resp
 
