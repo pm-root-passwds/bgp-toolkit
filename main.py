@@ -15,10 +15,10 @@ env = Environment(loader=FileSystemLoader(template_path),
                         autoescape=select_autoescape(['html', 'xml']))
 headers = json.loads(env.get_template('headers.json').render())
 
-api_key = "API-324C-1669-469F-9148"
+api_key = os.environ.get('ARIN_API_KEY')
 url = f"https://reg.arin.net"
 
-
+print(api_key)
 def test(as_set):
     """
 
@@ -30,8 +30,8 @@ def test(as_set):
                             )
 
     print(get)
-    # resp = post.json()
 
-    return post.status_code, resp
+    return get.status_code
+    # return get.status_code, resp
 
 test("AS-IONSWITCH")
