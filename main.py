@@ -44,10 +44,19 @@ class PyArin:
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
         """
+        # get = requests.get(
+        #     f"{self.url}/ticket/summary;ticketType=ASN_REQUEST?apikey={self.api_key}",
+        #     headers=self.headers,
+        # )
+        if not ticket_type or not ticket_status:
+            return  # Something useful
+        # print(f"test: {self.url}/ticket/summary;{'ticketType='+ticket_type if ticket_type else ''}?apikey={self.api_key}")
+
         get = requests.get(
-            f"{self.url}/ticket/summary;ticketType=ASN_REQUEST?apikey={self.api_key}",
+            f"{self.url}/ticket/summary;{'ticketType='+ticket_type if ticket_type else ''}{';' if ticket_type and ticket_status else ''}{'ticketStatus='+ticket_status if ticket_status else ''}=ASN_REQUEST?apikey={self.api_key}",
             headers=self.headers,
         )
+        print(dir(get))
 
         doc = xmltodict.parse(get.text)
 
@@ -55,4 +64,4 @@ class PyArin:
 
 
 test = PyArin()
-print(test.get_ticket_summaries())
+print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
