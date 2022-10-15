@@ -29,8 +29,8 @@ class PyArin:
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
         """
         get = requests.get(
-            f"{self.url}/rest/irr/as-set/{as_set}?apikey={api_key}",
-            headers=headers,
+            f"{self.url}/rest/irr/as-set/{as_set}?apikey={self.api_key}",
+            headers=self.headers,
         )
 
         doc = xmltodict.parse(get.text)
