@@ -12,7 +12,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class PyArin:
     def __init__(self):
-        self.url = "https://reg.arin.net"
+        self.url = "https://reg.arin.net/rest"
         self.template_path = templates.__path__[0]
         self.env = Environment(
             loader=FileSystemLoader(self.template_path),
@@ -25,11 +25,11 @@ class PyArin:
     def by_as_set(self, as_set):
         """
 
-        :param asn
+        :param as-set
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
         """
         get = requests.get(
-            f"{self.url}/rest/irr/as-set/{as_set}?apikey={self.api_key}",
+            f"{self.url}/irr/as-set/{as_set}?apikey={self.api_key}",
             headers=self.headers,
         )
 
@@ -38,6 +38,21 @@ class PyArin:
         return get.status_code, json.dumps(doc)
         # return get.status_code, resp
 
+    def get_ticket_summaries(self, ticket_type=None, ticket_status=None):
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+        get = requests.get(
+            f"{self.url}/ticket/summary;ticketType=ASN_REQUEST?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
 
 test = PyArin()
-print(test.by_as_set("AS-IONSWITCH"))
+print(test.get_ticket_summaries())
