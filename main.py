@@ -25,11 +25,12 @@ def test(as_set):
     :param asn
     :return: Tuple. Index 0 is http status code and index 1 is response dict.
     """
-    post = requests.get(f"{url}/rest/irr/as-set/{as_set}?apikey={api_key}",
+    get = requests.get(f"{url}/rest/irr/as-set/{as_set}?apikey={api_key}",
                             headers=headers,
                             )
 
-    resp = post.json()
+    print(get)
+    # resp = post.json()
 
     return post.status_code, resp
 
