@@ -58,9 +58,88 @@ class PyArin:
 
         return get.status_code, json.dumps(doc)
 
-    def get_roas(self):
-        pass
+    def get_roas(self, orghandle):
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/roa/{orghandle}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+        print(doc)
+        return get.status_code, json.dumps(doc)
+
+    def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        post = requests.post(
+            f"{self.url}/roa/{orghandle};resourceClass={resource_class}??apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(post.text)
+        print(doc)
+        return post.status_code, json.dumps(doc)
+
+    def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        post = requests.post(
+            f"{self.url}/roa/{orghandle};resourceClass={resource_class}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(post.text)
+        print(doc)
+        return post.status_code, json.dumps(doc)
+
+    def delete_roa(self, roahandle, resource_class):  # TODO: Test me
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        delete = requests.delete(
+            f"{self.url}/roa/spec/{roahandle}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(delete.text)
+        print(doc)
+        return delete.status_code, json.dumps(doc)
+
+    def whowas_asn(self, asn):
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/report/whoWas/asn/{asn}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+        print(get.text)
+        doc = xmltodict.parse(get.text)
+        # print(doc)
+        return get.status_code, json.dumps(doc)
 
 
 test = PyArin()
-print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
+# print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
+# print(test.get_roas(orghandle='BTL-251'))
+print(test.whowas_asn(asn=20055))
