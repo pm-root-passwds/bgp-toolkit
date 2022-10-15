@@ -144,7 +144,7 @@ class PyArin:
         # print(doc)
         return get.status_code, json.dumps(doc)
 
-    def req_associations_report(self):  # TODO: probably getting a 401 just like above
+    def req_associations_report(self):
         """
         https://www.arin.net/resources/manage/regrws/methods/#request-associations-report
 
