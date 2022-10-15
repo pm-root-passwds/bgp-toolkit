@@ -17,25 +17,30 @@ env = Environment(loader=FileSystemLoader(template_path),
 headers = json.loads(env.get_template('headers.json').render())
 
 api_key = os.environ.get('ARIN_API_KEY')
-url = f"https://reg.arin.net"
+url = f""
 
 print(api_key)
-def test(as_set):
-    """
 
-    :param asn
-    :return: Tuple. Index 0 is http status code and index 1 is response dict.
-    """
-    get = requests.get(f"{url}/rest/irr/as-set/{as_set}?apikey={api_key}",
-                            headers=headers,
-                            )
+class BgpToolkit:
+    def __init__(self):
+        self.url="https://reg.arin.net"
+        # self.
 
-    print(get)
+    def by_as_set(self, as_set):
+        """
 
-    print(get.text)
-    doc = xmltodict.parse(get.text)
-    print(doc)
-    return get.status_code
-    # return get.status_code, resp
+        :param asn
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+        get = requests.get(f"{self.url}/rest/irr/as-set/{as_set}?apikey={api_key}",
+                                headers=headers,
+                                )
 
-test("AS-IONSWITCH")
+        doc = xmltodict.parse(get.text)
+
+
+        return get.status_code, json.dumps(doc)
+        # return get.status_code, resp
+
+test = BgpToolkit()
+print(test.by_as_set("AS-IONSWITCH"))
