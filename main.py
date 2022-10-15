@@ -17,9 +17,7 @@ env = Environment(loader=FileSystemLoader(template_path),
 headers = json.loads(env.get_template('headers.json').render())
 
 api_key = os.environ.get('ARIN_API_KEY')
-url = f""
 
-print(api_key)
 
 class BgpToolkit:
     def __init__(self):
