@@ -138,6 +138,22 @@ class PyArin:
         # print(doc)
         return get.status_code, json.dumps(doc)
 
+    def whowas_ip(self, ip):
+        """
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/report/whoWas/net/{ip}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+        print(get.text)
+        doc = xmltodict.parse(get.text)
+        # print(doc)
+        return get.status_code, json.dumps(doc)
+
 
 test = PyArin()
 # print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
