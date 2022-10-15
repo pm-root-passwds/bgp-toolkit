@@ -40,6 +40,7 @@ class PyArin:
 
     def get_ticket_summaries(self, ticket_type=None, ticket_status=None):
         """
+        https://www.arin.net/resources/manage/regrws/methods/#get-ticket-summaries
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -60,6 +61,7 @@ class PyArin:
 
     def get_roas(self, orghandle):
         """
+        https://www.arin.net/resources/manage/regrws/methods/#get-a-list-of-roas-for-an-org
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -76,22 +78,7 @@ class PyArin:
 
     def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
         """
-
-        :param
-        :return: Tuple. Index 0 is http status code and index 1 is response dict.
-        """
-
-        post = requests.post(
-            f"{self.url}/roa/{orghandle};resourceClass={resource_class}??apikey={self.api_key}",
-            headers=self.headers,
-        )
-
-        doc = xmltodict.parse(post.text)
-        print(doc)
-        return post.status_code, json.dumps(doc)
-
-    def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
-        """
+        https://www.arin.net/resources/manage/regrws/methods/#submit-a-roa-request
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -108,6 +95,7 @@ class PyArin:
 
     def delete_roa(self, roahandle, resource_class):  # TODO: Test me
         """
+        https://www.arin.net/resources/manage/regrws/methods/#delete-a-roa
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -122,8 +110,9 @@ class PyArin:
         print(doc)
         return delete.status_code, json.dumps(doc)
 
-    def whowas_asn(self, asn):
+    def whowas_asn(self, asn):  # TODO: Getting a 401?
         """
+        https://www.arin.net/resources/manage/regrws/methods/#request-whowas-asn-report
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -138,8 +127,9 @@ class PyArin:
         # print(doc)
         return get.status_code, json.dumps(doc)
 
-    def whowas_ip(self, ip):
+    def whowas_ip(self, ip):  # TODO: probably getting a 401 just like above
         """
+        https://www.arin.net/resources/manage/regrws/methods/#request-whowas-net-report
 
         :param
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
@@ -154,8 +144,26 @@ class PyArin:
         # print(doc)
         return get.status_code, json.dumps(doc)
 
+    def req_associations_report(self):  # TODO: probably getting a 401 just like above
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#request-associations-report
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/report/associations?apikey={self.api_key}",
+            headers=self.headers,
+        )
+        print(get.text)
+        doc = xmltodict.parse(get.text)
+        # print(doc)
+        return get.status_code, json.dumps(doc)
+
 
 test = PyArin()
 # print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
 # print(test.get_roas(orghandle='BTL-251'))
-print(test.whowas_asn(asn=20055))
+# print(test.whowas_asn(asn=20055))
+print(test.req_associations_report())
