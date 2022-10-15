@@ -9,21 +9,16 @@ import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-template_path = templates.__path__[0]
 
-template_path = templates.__path__[0]
-env = Environment(loader=FileSystemLoader(template_path),
-                        autoescape=select_autoescape(['html', 'xml']))
-headers = json.loads(env.get_template('headers.json').render())
-
-api_key = os.environ.get('ARIN_API_KEY')
-
-
-class BgpToolkit:
+class PyArin:
     def __init__(self):
         self.url="https://reg.arin.net"
-        # self.
+        self.template_path = templates.__path__[0]
+        self.env = Environment(loader=FileSystemLoader(self.template_path),
+                          autoescape=select_autoescape(['html', 'xml']))
+        self.headers = json.loads(self.env.get_template('headers.json').render())
 
+        api_key = os.environ.get('ARIN_API_KEY')
     def by_as_set(self, as_set):
         """
 
@@ -40,5 +35,5 @@ class BgpToolkit:
         return get.status_code, json.dumps(doc)
         # return get.status_code, resp
 
-test = BgpToolkit()
+test = PyArin()
 print(test.by_as_set("AS-IONSWITCH"))
