@@ -18,7 +18,7 @@ class PyArin:
                           autoescape=select_autoescape(['html', 'xml']))
         self.headers = json.loads(self.env.get_template('headers.json').render())
 
-        api_key = os.environ.get('ARIN_API_KEY')
+        self.api_key = os.environ.get('ARIN_API_KEY')
     def by_as_set(self, as_set):
         """
 
