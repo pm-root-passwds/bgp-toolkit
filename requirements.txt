@@ -1,6 +1,4 @@
-requests
 jinja2
+pre-commit
+requests
 xmltodict
-
-
-
