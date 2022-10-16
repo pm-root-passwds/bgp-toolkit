@@ -1,0 +1,23 @@
+<customer xmlns="http://www.arin.net/regrws/core/v1" >
+  <customerName>{{ customer_name }}</customerName>
+  <iso3166-1>
+    <code2>{{ coutry_code_2 }}</code2>
+  </iso3166-1>
+  <handle></handle>
+  <streetAddress>
+  {%- for line in street_address %}
+    <line number = "{{ loop.index }}">{{ line }}</line>
+  {%- endfor %}
+  </streetAddress>
+  <city>{{ city }}</city>
+  <iso3166-2>{{ state_province }}</iso3166-2>
+  <postalCode>{{ postal_code }}</postalCode>
+  <comment>
+  {%- for line in comment %}
+    <line number = "{{ loop.index }}">{{ line }}</line>
+  {%- endfor %}
+  </comment>
+  <parentOrgHandle>{{ parent_org_handle }}</parentOrgHandle>
+  <registrationDate></registrationDate>
+  <privateCustomer>{{ private_bool }}</privateCustomer>
+</customer>
