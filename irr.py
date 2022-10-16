@@ -6,15 +6,13 @@ class IRR(Arin):
         super().__init__()
 
     def create_route(self, prefix, asn, descr, admin_c, tech_c, mnt_by):
-        body = (
-            f"route: {prefix}"
-            f"origin: {asn}"
-            f"descr: {descr}"
-            f"admin-c: {admin_c}"
-            f"tech-c: {tech_c}"
-            f"mnt-by: {mnt_by}"
-            f"source: ARIN"
-        )
+        body = f"""route6: {prefix}
+origin: {asn}
+descr: {descr}
+admin-c: {admin_c}
+tech-c: {tech_c}
+mnt-by: {mnt_by}
+source: ARIN"""
         req = requests.post(
             f'{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}',
             headers=self.headers_rpsl,
@@ -23,15 +21,13 @@ class IRR(Arin):
         return req
 
     def create_route6(self, prefix, asn, descr, admin_c, tech_c, mnt_by):
-        body = (
-            f"route6: {prefix}"
-            f"origin: {asn}"
-            f"descr: {descr}"
-            f"admin-c: {admin_c}"
-            f"tech-c: {tech_c}"
-            f"mnt-by: {mnt_by}"
-            f"source: ARIN"
-        )
+        body = f"""route6: {prefix}
+origin: {asn}
+descr: {descr}
+admin-c: {admin_c}
+tech-c: {tech_c}
+mnt-by: {mnt_by}
+source: ARIN"""
         req = requests.post(
             f'{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}',
             headers=self.headers_rpsl,
@@ -55,15 +51,13 @@ class IRR(Arin):
 
     def modify_route_object(self, prefix, asn, descr):
         existing = self.get_route_object(prefix, asn)
-        body = (
-            f"route: {prefix}"
-            f"origin: {asn}"
-            f"descr: {descr}"
-            f"admin-c: {existing['admin-c']}"
-            f"tech-c: {existing['tech-c']}"
-            f"mnt-by: {existing['mnt-by']}"
-            f"source: ARIN"
-        )
+        body = f"""route: {prefix}
+origin: {asn}
+descr: {descr}
+admin-c: {existing['admin-c']}
+tech-c: {existing['tech-c']}
+mnt-by: {existing['mnt-by']}
+source: ARIN"""
         put = requests.put(
             f'{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}',
             headers=self.headers_rpsl,
@@ -73,15 +67,13 @@ class IRR(Arin):
 
     def modify_route6_object(self, prefix, asn, descr):
         existing = self.get_route_object(prefix, asn)
-        body = (
-            f"route6: {prefix}"
-            f"origin: {asn}"
-            f"descr: {descr}"
-            f"admin-c: {existing['admin-c']}"
-            f"tech-c: {existing['tech-c']}"
-            f"mnt-by: {existing['mnt-by']}"
-            f"source: ARIN"
-        )
+        body = f"""route: {prefix}
+origin: {asn}
+descr: {descr}
+admin-c: {existing['admin-c']}
+tech-c: {existing['tech-c']}
+mnt-by: {existing['mnt-by']}
+source: ARIN"""
         put = requests.put(
             f"{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}",
             headers=self.headers_rpsl,
