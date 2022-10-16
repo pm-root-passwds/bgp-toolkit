@@ -39,6 +39,45 @@ class PyArin:
         return get.status_code, json.dumps(doc)
         # return get.status_code, resp
 
+    def get_ticket_details(self, ticket_number=None):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-ticket-details
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        if not ticket_number:
+            return  # Something useful
+
+        get = requests.get(
+            f"{self.url}/ticket/{ticket_number}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
+    def get_ticket_summary(self, ticket_number=None):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-ticket-summary
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        if not ticket_number:
+            return  # Something useful
+
+        get = requests.get(
+            f"{self.url}/ticket/{ticket_number}/summary?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
     def get_ticket_summaries(self, ticket_type=None, ticket_status=None):
         """
         https://www.arin.net/resources/manage/regrws/methods/#get-ticket-summaries
@@ -54,7 +93,6 @@ class PyArin:
             f"{self.url}/ticket/summary;{'ticketType='+ticket_type if ticket_type else ''}{';' if ticket_type and ticket_status else ''}{'ticketStatus='+ticket_status if ticket_status else ''}=ASN_REQUEST?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(dir(get))
 
         doc = xmltodict.parse(get.text)
 
@@ -74,7 +112,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(get.text)
-        print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
@@ -91,7 +129,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(post.text)
-        print(doc)
+
         return post.status_code, json.dumps(doc)
 
     def delete_roa(self, roahandle, resource_class):  # TODO: Test me
@@ -108,7 +146,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(delete.text)
-        print(doc)
+
         return delete.status_code, json.dumps(doc)
 
     def whowas_asn(self, asn):  # TODO: Getting a 401?
@@ -123,9 +161,9 @@ class PyArin:
             f"{self.url}/report/whoWas/asn/{asn}?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def whowas_ip(self, ip):  # TODO: probably getting a 401 just like above
@@ -140,9 +178,9 @@ class PyArin:
             f"{self.url}/report/whoWas/net/{ip}?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def req_associations_report(self):
@@ -157,9 +195,26 @@ class PyArin:
             f"{self.url}/report/associations?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
+        return get.status_code, json.dumps(doc)
+
+    def get_poc_info(self, poc_handle):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-poc-information
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/poc/{poc_handle}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
         return get.status_code, json.dumps(doc)
 ###IRR###
     def create_route(self, prefix, asn, descr, admin_c, tech_c, mnt_by):
@@ -203,37 +258,6 @@ source: ARIN""")
                 results[match[0][0]] = match[0][1]
         return results
 
-    def modify_route_object(self, prefix, asn, descr):
-        existing = self.get_route_object(prefix, asn)
-        body = (f"""route: {prefix}
-origin: {asn}
-descr: {descr}
-admin-c: {existing['admin-c']}
-tech-c: {existing['tech-c']}
-mnt-by: {existing['mnt-by']}
-source: ARIN""")
-        put = requests.put(f'{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}',
-        headers=self.headers_rpsl,
-        data = body)
-        return put
-
-    def modify_route6_object(self, prefix, asn, descr):
-        existing = self.get_route_object(prefix, asn)
-        body = (f"""route6: {prefix}
-origin: {asn}
-descr: {descr}
-admin-c: {existing['admin-c']}
-tech-c: {existing['tech-c']}
-mnt-by: {existing['mnt-by']}
-source: ARIN""")
-        put = requests.put(f"{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}",
-        headers=self.headers_rpsl,
-        data = body)
-        return put
-
-    def delete_route_object(self, prefix, asn):
-        delete = requests.delete(f"{self.url}/irr/route/{prefix}/{asn}?apikey={self.api_key}", headers=headers_rpsl)
-        return delete
 
 test = PyArin()
 # print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
