@@ -1,0 +1,41 @@
+<poc xmlns="http://www.arin.net/regrws/core/v1" >
+  <iso3166-2>{{ state_province }}</iso3166-2>
+	<iso3166-1>
+    <name></name>
+    <code2>{{ coutry_code_2 }}</code2>
+    <code3></code3>
+    <e164></e164>
+  </iso3166-1>
+  <emails>
+    <email>{{email}}</email>
+  </emails>
+  <streetAddress>
+  {%- for line in street_address %}
+    <line number = "{{ loop.index }}">{{ line }}</line>
+  {%- endfor %}
+  </streetAddress>
+  <city>{{city}}</city>
+	<postalCode>{{postal_code}}</postalCode>
+  <comment>
+      {%- for line in comments %}
+    <line number = "{{loop.index }}">{{line}}</line>
+      {%- endfor %}
+  </comment>
+  <registrationDate>{{reg_date}}</registrationDate>
+  <handle></handle>
+  <contactType>{{contact_type}}</contactType>
+  <companyName>{{company_name}}</companyName>
+  <firstName>{{first_name}}</firstName>
+  <middleName>{{middle_name}}</middleName>
+  <lastName>{{last_name}}</lastName>
+  <phones>
+    <phone>
+    	<type>
+    		<description>{{phone_description}}</description>
+    		<code>{{phone_code}}</code>
+    	</type>
+    	<number>{{phone_number}}</number>
+    	<extension>{{phone_extension}}</extension>
+    </phone>
+  </phones>
+</poc>

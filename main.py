@@ -38,6 +38,45 @@ class PyArin:
         return get.status_code, json.dumps(doc)
         # return get.status_code, resp
 
+    def get_ticket_details(self, ticket_number=None):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-ticket-details
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        if not ticket_number:
+            return  # Something useful
+
+        get = requests.get(
+            f"{self.url}/ticket/{ticket_number}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
+    def get_ticket_summary(self, ticket_number=None):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-ticket-summary
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        if not ticket_number:
+            return  # Something useful
+
+        get = requests.get(
+            f"{self.url}/ticket/{ticket_number}/summary?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
     def get_ticket_summaries(self, ticket_type=None, ticket_status=None):
         """
         https://www.arin.net/resources/manage/regrws/methods/#get-ticket-summaries
@@ -53,7 +92,6 @@ class PyArin:
             f"{self.url}/ticket/summary;{'ticketType='+ticket_type if ticket_type else ''}{';' if ticket_type and ticket_status else ''}{'ticketStatus='+ticket_status if ticket_status else ''}=ASN_REQUEST?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(dir(get))
 
         doc = xmltodict.parse(get.text)
 
@@ -73,7 +111,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(get.text)
-        print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def submit_roa_req(self, orghandle, resource_class):  # TODO: Test me
@@ -90,7 +128,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(post.text)
-        print(doc)
+
         return post.status_code, json.dumps(doc)
 
     def delete_roa(self, roahandle, resource_class):  # TODO: Test me
@@ -107,7 +145,7 @@ class PyArin:
         )
 
         doc = xmltodict.parse(delete.text)
-        print(doc)
+
         return delete.status_code, json.dumps(doc)
 
     def whowas_asn(self, asn):  # TODO: Getting a 401?
@@ -122,9 +160,9 @@ class PyArin:
             f"{self.url}/report/whoWas/asn/{asn}?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def whowas_ip(self, ip):  # TODO: probably getting a 401 just like above
@@ -139,9 +177,9 @@ class PyArin:
             f"{self.url}/report/whoWas/net/{ip}?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
         return get.status_code, json.dumps(doc)
 
     def req_associations_report(self):
@@ -156,14 +194,112 @@ class PyArin:
             f"{self.url}/report/associations?apikey={self.api_key}",
             headers=self.headers,
         )
-        print(get.text)
+
         doc = xmltodict.parse(get.text)
-        # print(doc)
+
         return get.status_code, json.dumps(doc)
+
+    def get_poc_info(self, poc_handle):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-poc-information
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+
+        get = requests.get(
+            f"{self.url}/poc/{poc_handle}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(get.text)
+
+        return get.status_code, json.dumps(doc)
+
+    def create_poc(
+        self,
+        first_name=None,
+        middle_name=None,
+        last_name=None,
+        company_name=None,
+        contact_type=None,
+        email=None,
+        phone_description=None,
+        phone_number=None,
+        phone_extension=None,
+        phone_code=None,
+        street_address=[],
+        city=None,
+        postal_code=None,
+        comments=[],
+        state_province=None,
+        coutry_code_2=None,
+        reg_date=None,
+    ):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-poc-information
+
+        :param
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
+        payload = self.env.get_template("poc_payload.xml").render(
+            first_name=first_name,
+            middle_name=middle_name,
+            last_name=last_name,
+            company_name=company_name,
+            contact_type=contact_type,
+            email=email,
+            phone_description=phone_description,
+            phone_number=phone_number,
+            phone_extension=phone_extension,
+            phone_code=phone_code,
+            street_address=street_address,
+            city=city,
+            postal_code=postal_code,
+            comments=comments,
+            state_province=state_province,
+            coutry_code_2=coutry_code_2,
+            reg_date=reg_date,
+        )
+        print(f"Payload: {payload}")
+        print(f"kwargs: {kwargs['first_name']}")
+        # get = requests.get(
+        #     f"{self.url}/poc/{poc_handle}?apikey={self.api_key}",
+        #     headers=self.headers,
+        # )
+        #
+        # doc = xmltodict.parse(get.text)
+
+        return
+        # get.status_code, json.dumps(doc)
 
 
 test = PyArin()
 # print(test.get_ticket_summaries(ticket_type="ASN_REQUEST", ticket_status="CLOSED"))
 # print(test.get_roas(orghandle='BTL-251'))
 # print(test.whowas_asn(asn=20055))
-print(test.req_associations_report())
+# print(test.req_associations_report())
+# print(test.get_ticket_details(ticket_number=f"20221015-X540551"))
+# print(test.get_ticket_summary(ticket_number=f"20221015-X540551"))
+# print(test.get_poc_info('JNB4-ARIN'))
+print(
+    test.create_poc(
+        first_name="Chris",
+        # middle_name=None,
+        last_name="Adams",
+        company_name="Ziply",
+        contact_type="PERSON",
+        email="chris.adams@ziply.com",
+        # phone_description=None,
+        phone_number="5099512726",
+        # phone_extension=None,
+        # phone_code=None,
+        street_address=["3630 E 31st Ave", "Not an apartment"],
+        city="Spokane",
+        postal_code="99223",
+        comments=["First line of comments", "second line of comments"],
+        state_province="Wa",
+        # coutry_code_2=None,
+        # reg_date=None,
+    )
+)
