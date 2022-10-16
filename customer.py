@@ -1,13 +1,7 @@
 #!/usr/bin/python3
 import json
-import os
-import re
 import requests
-import templates
-import urllib3
 import xmltodict
-from jinja2 import Environment, FileSystemLoader, select_autoescape
-from sys import prefix
 from arin import Arin
 
 
@@ -36,6 +30,59 @@ class Customer(Arin):
             url=url,
             headers=self.headers,
             data=rendered_payload
+        )
+        doc = xmltodict.parse(r.text)
+        print(doc)
+        return r.status_code, json.dumps(doc)
+
+    # UNTESTED
+    def get_customer_info(self, customer_handle: str):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#get-customer-information
+
+        :param customer_handle:
+        :return:
+        """
+        url = f"{self.url}/customer/{customer_handle}?apikey={self.api_key}"
+        r = requests.get(
+            url=url,
+            headers=self.headers,
+        )
+        doc = xmltodict.parse(r.text)
+        print(doc)
+        return r.status_code, json.dumps(doc)
+
+    # UNTESTED
+    def delete_customer(self, customer_handle: str):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#delete-customer
+
+        :param customer_handle:
+        :return:
+        """
+        url = f"{self.url}/customer/{customer_handle}?apikey={self.api_key}"
+        r = requests.delete(
+            url=url,
+            headers=self.headers,
+        )
+        doc = xmltodict.parse(r.text)
+        print(doc)
+        return r.status_code, json.dumps(doc)
+
+    # UNTESTED
+    def modify_customer(self, customer_handle: str, customer_payload: dict):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#modify-customer
+
+        :param customer_handle:
+        :param customer_payload:
+        :return:
+        """
+        url = f"{self.url}/customer/{customer_handle}?apikey={self.api_key}"
+        r = requests.post(
+            url=url,
+            headers=self.headers,
+            data=customer_payload
         )
         doc = xmltodict.parse(r.text)
         print(doc)
