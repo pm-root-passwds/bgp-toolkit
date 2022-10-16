@@ -1,8 +1,18 @@
-from arin import *
+#!/usr/bin/python3
+import json
+import os
+import re
+import requests
+import templates
+import urllib3
+import xmltodict
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+from sys import prefix
+from arin import Arin
 
 
 class POC(Arin):
-    def _init__(self):
+    def __init__(self):
         super().__init__()
 
     def get_poc_info(self, poc_handle):
@@ -21,3 +31,8 @@ class POC(Arin):
         doc = xmltodict.parse(get.text)
 
         return get.status_code, json.dumps(doc)
+
+
+temp = POC()
+r = temp.get_poc_info(poc_handle='HOLBR70-ARIN')
+print(r)
