@@ -2,7 +2,7 @@ from arin import *
 
 
 class IRR(Arin):
-    def _init__(self):
+    def __init__(self):
         super().__init__()
 
     def create_route(self, prefix, asn, descr, admin_c, tech_c, mnt_by):
