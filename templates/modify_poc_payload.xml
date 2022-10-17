@@ -17,23 +17,13 @@
   <city>{{city}}</city>
 	<postalCode>{{postal_code}}</postalCode>
   <comment>
-    {%- for line in comments %}
+      {%- for line in comments %}
     <line number = "{{loop.index }}">{{line}}</line>
-    {%- endfor %}
+      {%- endfor %}
   </comment>
-  <registrationDate>{{registration_date}}</registrationDate>
-  <handle>{{handle}}</handle>
+  <handle></handle>
   <contactType>{{contact_type}}</contactType>
   <companyName>{{company_name}}</companyName>
-  {%- if first_name %}
-  <firstName>{{first_name}}</firstName>
-  {%- endif %}
-  {%- if middle_name %}
-  <middleName>{{middle_name}}</middleName>
-  {%- endif %}
-  {%- if last_name %}
-  <lastName>{{last_name}}</lastName>
-  {%- endif %}
   <phones>
     <phone>
     	<type>

@@ -1,0 +1,22 @@
+  <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<asSet
+  xmlns="http://www.arin.net/regrws/core/v1">
+  <creationDate>2021-05-27T18:24:28Z</creationDate>
+  <description>
+    <line number="0">peers in AZ network</line>
+  </description>
+  <lastModifiedDate>2021-05-27T18:24:28Z</lastModifiedDate>
+  <orgHandle>EXAMPLECORP</orgHandle>
+  <pocLinks>
+    <pocLinkRef description="Tech" function="T" handle="EXAMPLETECH"/>
+    <pocLinkRef description="Routing" function="R" handle="EXAMPLEROUT"/>
+    <pocLinkRef description="Admin" function="AD" handle="EXAMPLEADMIN"/>
+  </pocLinks>
+  <source>ARIN</source>
+  <members>
+    <member name="AS-PHOENIX"/>
+    <member name="AS-MESA"/>
+    <member name="AS-SEDONA"/>
+  </members>
+  <name>AS-EXAMPLE-ARIZ</name>
+</asSet>

@@ -14,7 +14,7 @@ class Org(Arin):
 
         :return: Tuple. Index 0 is http status code and index 1 is response dict.
         """
-        print(org_handle)
+
         get = requests.get(
             f"{self.url}/org/{org_handle}?apikey={self.api_key}",
             headers=self.headers,
@@ -40,8 +40,18 @@ class Org(Arin):
 
         return put.status_code, json.dumps(doc)
 
+    def remove_poc_from_org(self, org_handle, poc_handle, poc_function):
+        """
+        https://www.arin.net/resources/manage/regrws/methods/#remove-poc
 
-temp = Org()
+        :return: Tuple. Index 0 is http status code and index 1 is response dict.
+        """
 
-r = temp.get_org_information("IL-446")
-print(r)
+        delete = requests.delete(
+            f"{self.url}/org/{org_handle}/poc/{poc_handle};pocFunction={poc_function}?apikey={self.api_key}",
+            headers=self.headers,
+        )
+
+        doc = xmltodict.parse(delete.text)
+
+        return delete.status_code, json.dumps(doc)
